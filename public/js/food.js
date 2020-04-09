@@ -4,34 +4,21 @@ $(document).ready(function () {
     };
 
     const getMonth = day => {
-        return moment().day(day).format("M");
+        return parseInt(moment().day(day).format("M"));
     };
 
     const getDay = day => {
-        return moment().day(day).format("D");
+        return parseInt(moment().day(day).format("D"));
     };
 
-    const displayPastWeeks = () => { //move out of the get route later so it's not constantly running everytime the get route runs
-        $.get(`/api/pastweeks/${weekID}`, data => {
-            console.log(data);
-
-            if(!data.length){
-                console.log("no data");
-                return;
-            }
-            else{
-                console.log("data");
-                for(const foodItem of data){
-                    pastWeeks.append(`<br>${foodItem.food_item}`);
-                }
-            }
-        })
-    };
+    const getYear = day => {
+        return parseInt(moment().day(day).format("YYYY"));
+    }
 
     const foodSearch = $("#food-search");
     const add = $(".add");
     const weeklyTotals = $("#weekly-totals");
-    const pastWeeks = $("#past-weeks");
+    const previousWeeks = $("#previous-weeks");
 
     const sunday = $("#sunday");
     const monday = $("#monday");
@@ -45,22 +32,23 @@ $(document).ready(function () {
     let day;
     let weekID;
 
-    let totalCalories = 0;
-    let totalFat = 0;
-    let totalCarbs = 0;
-    let totalSodium = 0;
-    let totalCholesterol = 0;
+    const displayFoodLog = foodDataArray => {
+        let totalCalories = 0;
+        let totalFat = 0;
+        let totalCarbs = 0;
+        let totalSodium = 0;
+        let totalCholesterol = 0;
 
-    $.get(`/api/${week}`, data => {
-        console.log(data);
-        if(!data.length){
-            weekID = 1;
-        }
-        else{
-            weekID = data[0].weekID;
-        }
+        sunday.empty().append(getDate(0));
+        monday.empty().append(getDate(1));
+        tuesday.empty().append(getDate(2));
+        wednesday.empty().append(getDate(3));
+        thursday.empty().append(getDate(4));
+        friday.empty().append(getDate(5));
+        saturday.empty().append(getDate(6));
+        weeklyTotals.empty().append("Weekly Totals:");
 
-        for(const day of data){
+        for (const day of foodDataArray) {
             console.log(day);
             totalCalories += Math.round(day.calories);
             totalFat += Math.round(day.fat);
@@ -68,7 +56,7 @@ $(document).ready(function () {
             totalSodium += Math.round(day.sodium);
             totalCholesterol += Math.round(day.cholesterol);
 
-            switch (day.dayID.toString()){
+            switch (day.dayID.toString()) {
                 case "0":
                     sunday.append(`<br> ${day.food_item} - ${Math.round(day.calories)} calories, ${Math.round(day.fat)} g fat, ${Math.round(day.carbs)} g carbs, ${Math.round(day.sodium)} mg sodium, ${Math.round(day.cholesterol)} mg cholesterol`);
                     break;
@@ -98,12 +86,63 @@ $(document).ready(function () {
             }
         }
         weeklyTotals.append(`<br>${totalCalories} calories <br>${totalFat} g fat <br>${totalCarbs} g carbs <br>${totalSodium} mg sodium <br>${totalCholesterol} mg cholesterol`);
-        displayPastWeeks();
-    });
+    };
+
+    const displayPreviousWeeks = query => {
+        $.get(`/api/previous-weeks/${query + "-display"}`, data => {
+            let weekCounter = 1;
+            const weekCounterArray = [];
+
+            if (!data.length) {
+                console.log("no data");
+                return;
+            }
+            else {
+                console.log("data");
+                for (const foodItem of data) {
+                    if (weekCounterArray.indexOf(foodItem.weekID) === -1) {
+                        previousWeeks.append(`<br> <p class="previous-weeks" data-week-id="${weekCounter}">Week ${weekCounter}</p>`);
+                        weekCounterArray.push(foodItem.weekID);
+                        weekCounter++;
+                    }
+                }
+                $(".previous-weeks").on("click", function () {
+                    console.log($(this).data("week-id"));
+                    const weekID = $(this).data("week-id");
+
+                    $.get(`/api/previous-weeks/${weekID}`, data => {
+                        console.log(data);
+                        displayFoodLog(data);
+                    });
+                });
+            }
+        });
+    };
+
+    const initializePage = () => {
+        $.get(`/api/currentweek/${week}`, data => {
+            console.log(week);
+            if (!data.length) {
+                weekID = 1;
+            }
+            else if ((data[data.length - 1].month + data[data.length - 1].day) <= getMonth(6) + getDay(6)) {
+                weekID = data[data.length - 1].weekID;
+                console.log(weekID);
+            }
+            else {
+                weekID = data[data.length - 1].weekID + 1;
+            }
+        }).then(data => {
+            displayFoodLog(data);
+            displayPreviousWeeks(weekID);
+        });
+    };
+
+    initializePage();
 
     foodSearch.hide();
 
-    add.on("click", function() {
+    add.on("click", function () {
         foodSearch.show();
         day = $(this).data("day");
     });
@@ -114,26 +153,16 @@ $(document).ready(function () {
         const food = $("#food-item").val().trim();
         $("#food-item").val("");
 
-
         $.post("/api/food", {
-            url: queryURL,
             food: food,
             date: getDate(day),
             month: getMonth(day),
             day: getDay(day),
+            year: getYear(day),
             dayID: day,
             weekID: weekID
         }).then(res => {
-            console.log(res);
             location.reload();
         })
     });
-
-    sunday.append(getDate(0));
-    monday.append(getDate(1));
-    tuesday.append(getDate(2));
-    wednesday.append(getDate(3));
-    thursday.append(getDate(4));
-    friday.append(getDate(5));
-    saturday.append(getDate(6));
 });

@@ -52,6 +52,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false
         },
+        year: {
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
         dayID: {
             type: DataTypes.INTEGER,
             allowNull: false

@@ -12,7 +12,7 @@ $(document).ready(function() {
             username: username,
             password: password
         }).then(res => {
-            console.log(res);
+            window.location.replace("/food-log");
         });
     };
 
