@@ -1,4 +1,17 @@
 $(document).ready(function () {
+    const foodSearch = $("#food-search");
+    const weeklyTotals = $("#weekly-totals");
+    const previousWeeks = $("#previous-weeks");
+    const error = $("#error");
+
+    const sunday = $("#sunday");
+    const monday = $("#monday");
+    const tuesday = $("#tuesday");
+    const wednesday = $("#wednesday");
+    const thursday = $("#thursday");
+    const friday = $("#friday");
+    const saturday = $("#saturday");
+
     const getDate = day => {
         return moment().day(day).format("dddd, MMMM Do YYYY");
     };
@@ -15,22 +28,9 @@ $(document).ready(function () {
         return parseInt(moment().day(day).format("YYYY"));
     }
 
-    const foodSearch = $("#food-search");
-    const add = $(".add");
-    const weeklyTotals = $("#weekly-totals");
-    const previousWeeks = $("#previous-weeks");
-
-    const sunday = $("#sunday");
-    const monday = $("#monday");
-    const tuesday = $("#tuesday");
-    const wednesday = $("#wednesday");
-    const thursday = $("#thursday");
-    const friday = $("#friday");
-    const saturday = $("#saturday");
-
-    const week = getMonth(0) + "-" + getDay(0) + "-" + getMonth(6) + "-" + getDay(6);
-    let day;
-    let weekID;
+    const getWeek = (weekNumber, weekDay) => {
+        return moment().week(weekNumber).day(weekDay).format("dddd, MMMM Do YYYY");
+    }
 
     const displayFoodLog = foodDataArray => {
         let totalCalories = 0;
@@ -39,14 +39,29 @@ $(document).ready(function () {
         let totalSodium = 0;
         let totalCholesterol = 0;
 
-        sunday.empty().append(getDate(0));
-        monday.empty().append(getDate(1));
-        tuesday.empty().append(getDate(2));
-        wednesday.empty().append(getDate(3));
-        thursday.empty().append(getDate(4));
-        friday.empty().append(getDate(5));
-        saturday.empty().append(getDate(6));
-        weeklyTotals.empty().append("Weekly Totals:");
+        if (!foodDataArray.length) {
+            console.log("no data");
+            console.log(weekOfYear);
+            sunday.empty().append(getWeek(weekOfYear, 0) + ' <button class="add" data-day="0">Add</button>');
+            monday.empty().append(getWeek(weekOfYear, 1) + ' <button class="add" data-day="1">Add</button>');
+            tuesday.empty().append(getWeek(weekOfYear, 2) + ' <button class="add" data-day="2">Add</button>');
+            wednesday.empty().append(getWeek(weekOfYear, 3) + ' <button class="add" data-day="3">Add</button>');
+            thursday.empty().append(getWeek(weekOfYear, 4) + ' <button class="add" data-day="4">Add</button>');
+            friday.empty().append(getWeek(weekOfYear, 5) + ' <button class="add" data-day="5">Add</button>');
+            saturday.empty().append(getWeek(weekOfYear, 6) + ' <button class="add" data-day="6">Add</button>');
+            weeklyTotals.empty().append("Weekly Totals:");
+        }
+        else {
+            console.log("data");
+            sunday.empty().append(getWeek(foodDataArray[0].weekOfYear, 0) + ' <button class="add" data-day="0">Add</button>');
+            monday.empty().append(getWeek(foodDataArray[0].weekOfYear, 1) + ' <button class="add" data-day="1">Add</button>');
+            tuesday.empty().append(getWeek(foodDataArray[0].weekOfYear, 2) + ' <button class="add" data-day="2">Add</button>');
+            wednesday.empty().append(getWeek(foodDataArray[0].weekOfYear, 3) + ' <button class="add" data-day="3">Add</button>');
+            thursday.empty().append(getWeek(foodDataArray[0].weekOfYear, 4) + ' <button class="add" data-day="4">Add</button>');
+            friday.empty().append(getWeek(foodDataArray[0].weekOfYear, 5) + ' <button class="add" data-day="5">Add</button>');
+            saturday.empty().append(getWeek(foodDataArray[0].weekOfYear, 6) + ' <button class="add" data-day="6">Add</button>');
+            weeklyTotals.empty().append("Weekly Totals:");
+        }
 
         for (const day of foodDataArray) {
             console.log(day);
@@ -58,34 +73,51 @@ $(document).ready(function () {
 
             switch (day.dayID.toString()) {
                 case "0":
-                    sunday.append(`<br> ${day.food_item} - ${Math.round(day.calories)} calories, ${Math.round(day.fat)} g fat, ${Math.round(day.carbs)} g carbs, ${Math.round(day.sodium)} mg sodium, ${Math.round(day.cholesterol)} mg cholesterol`);
+                    sunday.append(`<br> ${day.food_item} - ${Math.round(day.calories)} calories, ${Math.round(day.fat)} g fat, ${Math.round(day.carbs)} g carbs, ${Math.round(day.sodium)} mg sodium, ${Math.round(day.cholesterol)} mg cholesterol <button class="delete" data-food-id="${day.id}">Delete</button>`);
                     break;
 
                 case "1":
-                    monday.append(`<br> ${day.food_item} - ${Math.round(day.calories)} calories, ${Math.round(day.fat)} g fat, ${Math.round(day.carbs)} g carbs, ${Math.round(day.sodium)} mg sodium, ${Math.round(day.cholesterol)} mg cholesterol`);
+                    monday.append(`<br> ${day.food_item} - ${Math.round(day.calories)} calories, ${Math.round(day.fat)} g fat, ${Math.round(day.carbs)} g carbs, ${Math.round(day.sodium)} mg sodium, ${Math.round(day.cholesterol)} mg cholesterol <button class="delete" data-food-id="${day.id}">Delete</button>`);
                     break;
 
                 case "2":
-                    tuesday.append(`<br> ${day.food_item} - ${Math.round(day.calories)} calories, ${Math.round(day.fat)} g fat, ${Math.round(day.carbs)} g carbs, ${Math.round(day.sodium)} mg sodium, ${Math.round(day.cholesterol)} mg cholesterol`);
+                    tuesday.append(`<br> ${day.food_item} - ${Math.round(day.calories)} calories, ${Math.round(day.fat)} g fat, ${Math.round(day.carbs)} g carbs, ${Math.round(day.sodium)} mg sodium, ${Math.round(day.cholesterol)} mg cholesterol <button class="delete" data-food-id="${day.id}">Delete</button>`);
                     break;
 
                 case "3":
-                    wednesday.append(`<br> ${day.food_item} - ${Math.round(day.calories)} calories, ${Math.round(day.fat)} g fat, ${Math.round(day.carbs)} g carbs, ${Math.round(day.sodium)} mg sodium, ${Math.round(day.cholesterol)} mg cholesterol`);
+                    wednesday.append(`<br> ${day.food_item} - ${Math.round(day.calories)} calories, ${Math.round(day.fat)} g fat, ${Math.round(day.carbs)} g carbs, ${Math.round(day.sodium)} mg sodium, ${Math.round(day.cholesterol)} mg cholesterol <button class="delete" data-food-id="${day.id}">Delete</button>`);
                     break;
 
                 case "4":
-                    thursday.append(`<br> ${day.food_item} - ${Math.round(day.calories)} calories, ${Math.round(day.fat)} g fat, ${Math.round(day.carbs)} g carbs, ${Math.round(day.sodium)} mg sodium, ${Math.round(day.cholesterol)} mg cholesterol`);
+                    thursday.append(`<br> ${day.food_item} - ${Math.round(day.calories)} calories, ${Math.round(day.fat)} g fat, ${Math.round(day.carbs)} g carbs, ${Math.round(day.sodium)} mg sodium, ${Math.round(day.cholesterol)} mg cholesterol <button class="delete" data-food-id="${day.id}">Delete</button>`);
                     break;
 
                 case "5":
-                    friday.append(`<br> ${day.food_item} - ${Math.round(day.calories)} calories, ${Math.round(day.fat)} g fat, ${Math.round(day.carbs)} g carbs, ${Math.round(day.sodium)} mg sodium, ${Math.round(day.cholesterol)} mg cholesterol`);
+                    friday.append(`<br> ${day.food_item} - ${Math.round(day.calories)} calories, ${Math.round(day.fat)} g fat, ${Math.round(day.carbs)} g carbs, ${Math.round(day.sodium)} mg sodium, ${Math.round(day.cholesterol)} mg cholesterol <button class="delete" data-food-id="${day.id}">Delete</button>`);
                     break;
 
                 default:
-                    saturday.append(`<br> ${day.food_item} - ${Math.round(day.calories)} calories, ${Math.round(day.fat)} g fat, ${Math.round(day.carbs)} g carbs, ${Math.round(day.sodium)} mg sodium, ${Math.round(day.cholesterol)} mg cholesterol`);
+                    saturday.append(`<br> ${day.food_item} - ${Math.round(day.calories)} calories, ${Math.round(day.fat)} g fat, ${Math.round(day.carbs)} g carbs, ${Math.round(day.sodium)} mg sodium, ${Math.round(day.cholesterol)} mg cholesterol <button class="delete" data-food-id="${day.id}">Delete</button>`);
             }
         }
         weeklyTotals.append(`<br>${totalCalories} calories <br>${totalFat} g fat <br>${totalCarbs} g carbs <br>${totalSodium} mg sodium <br>${totalCholesterol} mg cholesterol`);
+
+        $(".add").on("click", function () {
+            foodSearch.show();
+            day = $(this).data("day");
+        });
+
+        $(".delete").on("click", function () {
+            const foodID = $(this).data("food-id");
+            console.log(foodID);
+
+            $.ajax({
+                url: `/api/delete/${foodID}`,
+                type: "DELETE",
+            }).then(res => {
+                location.reload();
+            });
+        });
     };
 
     const displayPreviousWeeks = query => {
@@ -138,14 +170,14 @@ $(document).ready(function () {
         });
     };
 
+    const week = getMonth(0) + "-" + getDay(0) + "-" + getMonth(6) + "-" + getDay(6);
+    const weekOfYear = moment().week();
+    let day;
+    let weekID;
+
     initializePage();
 
     foodSearch.hide();
-
-    add.on("click", function () {
-        foodSearch.show();
-        day = $(this).data("day");
-    });
 
     foodSearch.on("submit", event => {
         event.preventDefault();
@@ -160,9 +192,17 @@ $(document).ready(function () {
             day: getDay(day),
             year: getYear(day),
             dayID: day,
-            weekID: weekID
+            weekID: weekID,
+            weekOfYear: weekOfYear
         }).then(res => {
-            location.reload();
-        })
+            if(!res){
+                console.log("no results");
+                error.empty().append("No nutritional information was found.");
+            }
+            else{
+                console.log("results found");
+                location.reload();
+            }
+        });
     });
 });

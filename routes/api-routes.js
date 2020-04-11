@@ -14,15 +14,12 @@ module.exports = app => {
         }).then(() => {
             res.redirect(307, "/api/login");
         }).catch(err => {
-            res.status(401).json(err);
-        });
+            res.sendStatus(401).json(err);
+          });
     });
 
     app.post("/api/login", passport.authenticate("local"), (req, res) => {
-        res.json({
-            username: req.user.username,
-            id: req.user.id
-        });
+        res.sendStatus(200);
     });
 
     app.get("/logout", (req, res) => {
@@ -39,32 +36,39 @@ module.exports = app => {
 
         axios.get(`https://api.edamam.com/api/nutrition-data?app_id=${process.env.APP_ID}&app_key=${process.env.API_KEY}&ingr=${food}`).then(response => {
             const responseArray = [response.data.totalNutrients.ENERC_KCAL, response.data.totalNutrients.FAT, response.data.totalNutrients.CHOCDF, response.data.totalNutrients.NA, response.data.totalNutrients.CHOLE]
-            for(let i = 0; i < responseArray.length; i++){
-                if(responseArray[i] === undefined){
-                    responseArray[i] = {quantity: 0};
-                }
+            
+            if(responseArray[0] === undefined) {
+                res.json(0);
             }
-            console.log(responseArray);
+            else {
+                for (let i = 0; i < responseArray.length; i++) {
+                    if (responseArray[i] === undefined) {
+                        responseArray[i] = { quantity: 0 };
+                    }
+                }
+                console.log(responseArray);
 
-            db.FoodLog.create({
-                food_item: food,
-                calories: responseArray[0].quantity,
-                fat: responseArray[1].quantity,
-                carbs: responseArray[2].quantity,
-                sodium: responseArray[3].quantity,
-                cholesterol: responseArray[4].quantity,
-                date: req.body.date,
-                month: req.body.month,
-                day: req.body.day,
-                year: req.body.year,
-                dayID: req.body.dayID,
-                weekID: req.body.weekID,
-                UserId: req.user.id
-            }).then(dbResponse => {
-                res.json(dbResponse);
-            })
-        })
-    })
+                db.FoodLog.create({
+                    food_item: food,
+                    calories: responseArray[0].quantity,
+                    fat: responseArray[1].quantity,
+                    carbs: responseArray[2].quantity,
+                    sodium: responseArray[3].quantity,
+                    cholesterol: responseArray[4].quantity,
+                    date: req.body.date,
+                    month: req.body.month,
+                    day: req.body.day,
+                    year: req.body.year,
+                    dayID: req.body.dayID,
+                    weekID: req.body.weekID,
+                    weekOfYear: req.body.weekOfYear,
+                    UserId: req.user.id
+                }).then(dbResponse => {
+                    res.json(dbResponse);
+                });
+            }
+        });
+    });
 
     //Get route to get and display the current week's food log
 
@@ -154,4 +158,18 @@ module.exports = app => {
             });
         }
     })
+
+    //Delete route to delete food logs
+
+    app.delete("/api/delete/:foodID", (req, res) => {
+        const foodID = req.params.foodID;
+
+        db.FoodLog.destroy({
+            where: {
+                id: foodID
+            }
+        }).then(() => {
+            res.sendStatus(200);
+        });
+    });
 };
