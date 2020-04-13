@@ -1,3 +1,28 @@
+.dropdown-trigger {
+    width: 400px;
+}
+
+.add {
+    margin-left: 5px;
+}
+
+.add:hover, .delete:hover {
+    cursor: pointer;
+}
+
+#food-log-nav {
+    height: 64px !important;
+}
+
+#food-item {
+    width: 500px;
+    background-color: white;
+}
+
+#icon1, #icon2 {
+    color: black;
+}
+
 *,body.html{
     margin: 0;
     padding: 0;
@@ -9,6 +34,7 @@ html {
   }
 body{
     display: grid;
+    background-color: rgb(179, 199, 199);
 }
 ::-webkit-scrollbar {
     width: 7px;
@@ -442,7 +468,6 @@ video {
 }
 .search-container input{
     width: unset !important;
-    /* height: unset !important; */
     position: relative;
     display: inline-block !important;
     font-size: 20px;
@@ -482,6 +507,23 @@ video {
 }
 .search-container input[type='submit']:hover{
     background: #ff5722;
+}
+td label [type="checkbox"].filled-in:checked+span:not(.lever):after{
+    background-color: red !important;
+    border: 2px solid black;
+}
+td label [type="checkbox"].filled-in:checked+span:not(.lever):before{
+    /* border-right: 2px solid black;
+    border-bottom: 2px solid black; */
+}
+td label span{
+    margin-right: -18px;
+}
+.select-wrapper input.select-dropdown{
+    border-bottom: 2px solid brown !important;
+}
+.dropdown-content li>a, .dropdown-content li>span{
+    color: green !important;
 }
 
   /* [ANIMATION] */
