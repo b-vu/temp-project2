@@ -20,10 +20,10 @@ $(document).ready(function() {
             if(res === "OK") {
                 window.location.replace("/");
             }
-            else if(res.errors[0].message === "users.username must be unique") {
+            else if(res.errors[0].message === "username must be unique") {
                 signUpError("That username is already taken.");
             }
-            else if(res.errors[0].message === "users.email must be unique") {
+            else if(res.errors[0].message === "email must be unique") {
                 signUpError("That email has already been registered.");
             }
         });
