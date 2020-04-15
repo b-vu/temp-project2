@@ -17,7 +17,7 @@ $(document).ready(function() {
         if($(this).scrollTop() < 100) {
             $('.navy').css('height','0');
             $('.nav-wrapper a').css({
-                color: 'rgb(255, 231, 188)',
+                color: 'rgb(255, 213, 28)',
                 'text-shadow': '2px 2px 2px black'
             })
         };
