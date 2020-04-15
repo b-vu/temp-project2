@@ -1,5 +1,0 @@
-DROP DATABASE IF EXISTS foodzi;
-
-CREATE DATABASE foodzi;
-
-USE foodzi;

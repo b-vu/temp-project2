@@ -1,22 +1,23 @@
 <nav>
-    <div class="nav-wrapper purple" id="food-log-nav">
-        <a href="/food-log" class="brand-logo center">Food Log</a>
-        <ul id="nav-mobile" class="left hide-on-med-and-down">
-            <li><a href="/">FOODZI</a></li>
-        </ul>
+  <div class="nav-wrapper purple" id="food-log-nav">
+    <a href="/food-log" class="brand-logo center">Food Log</a>
+    <ul id="nav-mobile" class="left hide-on-med-and-down">
+      <li><a href="/">FOODZI</a></li>
+    </ul>
 
-        <form id="food-search">
-            <div class="input-field" id="hide-food-search">
-                <input placeholder="Search for nutritional value" id="food-item" type="search" required>
-                <label class="label-icon" for="search"><i class="material-icons" id="icon1">search</i></label>
-                <i class="material-icons" id="icon2">close</i>
-            </div>
-        </form>
-    </div>
-    
-    <div class="nav-wrapper red" id="error-nav">
-        <span href="" class="brand-logo center"><i class="material-icons">error</i>No nutritional information was found.</span>
-    </div>
+    <form id="food-search">
+      <div class="input-field" id="hide-food-search">
+        <input placeholder="Search for nutritional value" id="food-item" type="search" required>
+        <label class="label-icon" for="search"><i class="material-icons" id="icon1">search</i></label>
+        <i class="material-icons" id="icon2">close</i>
+      </div>
+    </form>
+  </div>
+
+  <div class="nav-wrapper red" id="error-nav">
+    <span href="" class="brand-logo center"><i class="material-icons">error</i>No nutritional information was
+      found.</span>
+  </div>
 </nav>
 
 <div id="food-log-table">
@@ -24,12 +25,12 @@
     <table class="striped centered">
       <thead>
         <tr>
-            <th>Date</th>
-            <th>Calories</th>
-            <th>Carbs</th>
-            <th>Fat</th>
-            <th>Sodium</th>
-            <th>Cholesterol</th>
+          <th>Date</th>
+          <th>Calories</th>
+          <th>Carbs</th>
+          <th>Fat</th>
+          <th>Sodium</th>
+          <th>Cholesterol</th>
         </tr>
       </thead>
 
@@ -91,26 +92,26 @@
           <td id="saturday-cholesterol"></td>
         </tr>
         <tr>
-            <td><b>Weekly Totals</b></td>
-            <td id="weekly-total-calories"></td>
-            <td id="weekly-total-carbs"></td>
-            <td id="weekly-total-fat"></td>
-            <td id="weekly-total-sodium"></td>
-            <td id="weekly-total-cholesterol"></td>
+          <td><b>Weekly Totals</b></td>
+          <td id="weekly-total-calories"></td>
+          <td id="weekly-total-carbs"></td>
+          <td id="weekly-total-fat"></td>
+          <td id="weekly-total-sodium"></td>
+          <td id="weekly-total-cholesterol"></td>
         </tr>
       </tbody>
     </table>
   </div>
 
-<div class="center" style="margin: 30px 0;">
-  <!-- Dropdown Trigger -->
-  <a class='dropdown-trigger btn col s6 offset-s3 m4 offset-m4 l4 offset-l4' href='#' data-target='dropdown1'
-    id="current-week">Select A Week</a>
+  <div class="center" style="margin: 30px 0;">
+    <!-- Dropdown Trigger -->
+    <a class='dropdown-trigger btn col s6 offset-s3 m4 offset-m4 l4 offset-l4' href='#' data-target='dropdown1'
+      id="current-week">Select A Week</a>
 
-  <!-- Dropdown Structure -->
-  <ul id='dropdown1' class='dropdown-content'>
-  </ul>
-</div>
+    <!-- Dropdown Structure -->
+    <ul id='dropdown1' class='dropdown-content'>
+    </ul>
+  </div>
 
 </div>
 
