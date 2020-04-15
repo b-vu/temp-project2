@@ -319,9 +319,6 @@ module.exports = app => {
         const recipeInput = req.body.input;
 
         axios.get(`https://api.spoonacular.com/recipes/search?apiKey=${process.env.API_KEY2}&query=${recipeInput}&number=10`).then(response => {
-            
-
-            
             const responseData = response.data.results
             
             // console.log(responseData)
@@ -332,13 +329,9 @@ module.exports = app => {
             //    res.json(resData)
             // }
 
-           
-
         }).catch(error => {
             if(error) throw error;
         })
-    
-
         // db.FoodStorage.findAll({
         //     where: {
         //         UserId: userID
@@ -347,9 +340,5 @@ module.exports = app => {
         //     console.log(result);
         //     res.json(result);
         // });
-
     })
-
-
-
 };
